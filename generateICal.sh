@@ -34,10 +34,32 @@ while read line; do
 done <$tmp
 
 
-cat preamble.txt > $tmp2
+echo "BEGIN:VCALENDAR" > $tmp2
+echo "VERSION:2.0" >> $tmp2
+echo "PRODID:SegvaultSpace" >> $tmp2
+echo "BEGIN:VTIMEZONE" >> $tmp2
+echo "TZID:Europe/Vienna" >> $tmp2
+echo "X-LIC-LOCATION:Europe/Vienna" >> $tmp2
+echo "BEGIN:DAYLIGHT" >> $tmp2
+echo "TZOFFSETFROM:+0100" >> $tmp2
+echo "TZOFFSETTO:+0200" >> $tmp2
+echo "TZNAME:Europe/Vienna" >> $tmp2
+echo "DTSTART:19700329T020000" >> $tmp2
+echo "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3" >> $tmp2
+echo "END:DAYLIGHT" >> $tmp2
+echo "BEGIN:STANDARD" >> $tmp2
+echo "TZOFFSETFROM:+0200" >> $tmp2
+echo "TZOFFSETTO:+0100" >> $tmp2
+echo "TZNAME:Europe/Vienna" >> $tmp2
+echo "DTSTART:19701025T030000" >> $tmp2
+echo "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10" >> $tmp2
+echo "END:STANDARD" >> $tmp2
+echo "END:VTIMEZONE" >> $tmp2
+
 cat $incremented  | tr "\n" "\r" | sed 's/\r\r*/\r/g'| sed -r 's/ \r/\r/g'| sed -r 's/\r([A-Z][A-Z][A-Z])/\n\1/g' | sed 's/\r$//g' | sed 's/\r/\\n/g' | sed 's/  */ /g' | iconv -c -t ascii >> $tmp2
-echo -e "\nEND:VCALENDAR" >> $tmp2
 rm $incremented
+
+echo -e "\nEND:VCALENDAR" >> $tmp2
 
 cat $tmp2 | sed '/^\s*$/d' | perl -pe 's/\n/\r\n/' > $tmp
 
