@@ -16,7 +16,7 @@ cat $tmp2 | sed -r "s/.*<div class=\"entry-date\">([^\.]+)\.*<span>(.*)<\/span><
 
 cat $tmp | sed 's/Mai/05/g' | sed 's/März/03/g' | sed 's/April/04/g' | sed 's/Februar/02/g' | sed 's/J<C3><A4>nner/01/g' | sed 's/Juni/06/g' | sed -r 's/ *ZERO/0/g' | sed 's/Juli/07/g' | sed 's/August/08/g' | sed 's/September/09/g' | sed 's/Oktober/10/g' | sed 's/November/11/g' | sed 's/Dezember/12/g' >  $tmp2
 
-cat $tmp2 | sed 's/00 00$/0000/g' | sed -r 's/[ \t\f]$//g' | sed 's/$/<br>/' | sed 's/\.$//g' | sed 's/??/01/g'  | pandoc -f html -t plain | sed -r 's/:([0-9]{6})([0-9])$/:\10\2/g' |  sed -r 's/:([0-9]{6})([0-9])T/:\10\2T/g'| sed -r 's/([0-9]) 59/\159/g' > $tmp
+cat $tmp2 | sed 's/00 00$/0000/g' | sed -r 's/[ \t\f]$//g' | sed 's/$/<br>/' | sed 's/\.$//g' | sed 's/??/01/g'  | pandoc -f html -t plain | sed -r 's/:([0-9]{6})([0-9])$/:\10\2/g' |  sed -r 's/:([0-9]{6})([0-9])T/:\10\2T/g'| sed -r 's/([0-9]) 59/\159/g' | sed "s/$(echo '&#223;' | pandoc -f html -t plain)/ss/g" | sed "s/$(echo '&ouml;' | pandoc -f html -t plain)/oe/g" | sed "s/$(echo '&auml;' | pandoc -f html -t plain)/ae/g" > $tmp
 
 incremented=$(tempfile)
 last_hour="19"
