@@ -1,0 +1,51 @@
+BEGIN:VEVENT
+UID:SEGVAULT20180427T183000
+SUMMARY:LLFM - Abend
+DTSTART;TZID=Europe/Vienna:20180427T183000
+DTEND;TZID=Europe/Vienna:20180427T203059
+DTSTAMP:20180427T183000Z
+CATEGORIES:Public
+LOCATION:Heinrich-Schneidmadl-Str. 15\, Top 0.23\, St. Plten\, Austria
+DESCRIPTION:Immer am letzten Freitag im Monat (auer Feiertage) findet\nunser Lockpicking Abend statt. Kurz: LLFM (Lockpicking - letzter Freitag\nim Monat / last Friday of Month.
+END:VEVENT
+BEGIN:VEVENT
+UID:SEGVAULT20180301T183000
+SUMMARY:Vortrag Social Engineering
+DTSTART;TZID=Europe/Vienna:20180301T183000
+DTEND;TZID=Europe/Vienna:20180301T203059
+DTSTAMP:20180301T183000Z
+CATEGORIES:Public
+LOCATION:Heinrich-Schneidmadl-Str. 15\, Top 0.23\, St. Plten\, Austria
+DESCRIPTION:Was ist Social Engineering? Was kann passieren? Wie gehen\ndie Angreifer vor? Beispiele/Geschichten aus der Praxis. Offen fr eine\nDiskussionsrunde. Bitte um Voranmeldung: Hier anmelden
+END:VEVENT
+BEGIN:VEVENT
+UID:SEGVAULT20180508T180000
+SUMMARY:Plenum
+DTSTART;TZID=Europe/Vienna:20180508T180000
+DTEND;TZID=Europe/Vienna:20180508T200059
+DTSTAMP:20180508T180000Z
+CATEGORIES:Member
+LOCATION:Heinrich-Schneidmadl-Str. 15\, Top 0.23\, St. Plten\, Austria
+DESCRIPTION:Wir stimmen ber wichtige Dinge ab und diskutieren Ideen\,\ndie den Verein weiterbringen. Mehr dazu unter: Plenum
+END:VEVENT
+BEGIN:VEVENT
+UID:SEGVAULT2018026T180000
+SUMMARY:2. Plenum
+DTSTART;TZID=Europe/Vienna:20180206T180000
+DTEND;TZID=Europe/Vienna:20180206T200059
+DTSTAMP:20180206T180000Z
+CATEGORIES:Member
+LOCATION:Heinrich-Schneidmadl-Str. 15\, Top 0.23\, St. Plten\, Austria
+DESCRIPTION:Wir stimmen ber wichtige Dinge ab und diskutieren Ideen\,\ndie den Verein weiterbringen. Mehr dazu unter: Plenum
+END:VEVENT
+BEGIN:VEVENT
+UID:SEGVAULT20180810T170000
+SUMMARY:Mate\, Kaffee & Co.
+DTSTART;TZID=Europe/Vienna:20180810T170000
+DTEND;TZID=Europe/Vienna:20180810T190059
+DTSTAMP:20180810T1700 00Z
+CATEGORIES:Public
+LOCATION:Heinrich-Schneidmadl-Str. 15\, Top 0.23\, St. Plten\, Austria
+DESCRIPTION:Kommt vorbei\, schaut euch den aktuellen Stand an\, plaudert\nmit uns\, bringt Ideen ein und tauscht euch mit uns aus :-)
+END:VEVENT
+END:VCALENDAR
