@@ -12,7 +12,7 @@ rm $tmp
 
 currentYear=$(date '+%Y')
 
-cat $tmp2 | sed -r "s/.*<div class=\"entry-date\">([^\.]+)\.+-*([0-9]*)\.*<span>(.*)<\/span><\/div> +<\/a>.*<h2><a href=\"#\">(.*)<\/a><\/h2>.*<span class=\"label label-.*\">(.*)<\/span><\/li>.*<i class=\"icon-time\"><\/i>([0-9 ]*):*([0-9 ]*).*<\/a><\/li> <li><a href=\"#\">.*class=\"icon-map-marker2\"><\/i>(.*)<\/a><\/li> <\/ul.*<div class=\"entry-content\"> <p>(.*)<\/p> <\/div> <\/div> <\/div.*/BEGIN:VEVENT\nUID:SEGVAULT$currentYear\3\1T\6\700\nSUMMARY:\4\nDTSTART;TZID=Europe\/Vienna:$currentYear\3\1T\6\7ZEROZERO\nDTEND;TZID=Europe\/Vienna:$currentYear\3\2T\6\759\nDTSTAMP:$currentYear\3\1T\6\700Z\nCATEGORIES:\5\nLOCATION:\8\nDESCRIPTION:\9\nEND:VEVENT/g" > $tmp
+cat $tmp2 | sed -r "s/.*<div class=\"entry-date\">([^\.]+)\.*-*([0-9]*)\.*<span>(.*)<\/span><\/div> +<\/a>.*<h2><a href=\"#\">(.*)<\/a><\/h2>.*<span class=\"label label-.*\">(.*)<\/span><\/li>.*<i class=\"icon-time\"><\/i>([0-9 ]*):*([0-9 ]*).*<\/a><\/li> <li><a href=\"#\">.*class=\"icon-map-marker2\"><\/i>(.*)<\/a><\/li> <\/ul.*<div class=\"entry-content\"> <p>(.*)<\/p> <\/div> <\/div> <\/div.*/BEGIN:VEVENT\nUID:SEGVAULT$currentYear\3\1T\6\700\nSUMMARY:\4\nDTSTART;TZID=Europe\/Vienna:$currentYear\3\1T\6\7ZEROZERO\nDTEND;TZID=Europe\/Vienna:$currentYear\3\2T\6\759\nDTSTAMP:$currentYear\3\1T\6\700Z\nCATEGORIES:\5\nLOCATION:\8\nDESCRIPTION:\9\nEND:VEVENT/g" > $tmp
 
 cat $tmp | sed 's/Mai/05/g' | sed 's/März/03/' | sed 's/Jänner/01/g'  | sed 's/April/04/g' | sed 's/Februar/02/g' | sed 's/J<C3><A4>nner/01/g' | sed 's/Juni/06/g' | sed -r 's/ *ZERO/0/g' | sed 's/Juli/07/g' | sed 's/August/08/g' | sed 's/September/09/g' | sed 's/Septemeber/09/g' | sed 's/Oktober/10/g' | sed 's/November/11/g' | sed 's/Dezember/12/g' >  $tmp2
 
@@ -63,7 +63,10 @@ echo "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10" >> $tmp2
 echo "END:STANDARD" >> $tmp2
 echo "END:VTIMEZONE" >> $tmp2
 
-cat $incremented | sed 's/T59$/T235959/g' | sed -r 's/(DTSTART;.*T)235959/\1000000/g' | tr "\n" "\r" | sed 's/\r\r*/\r/g'| sed -r 's/ \r/\r/g'| sed -r 's/\r([A-Z][A-Z][A-Z])/\n\1/g' | sed 's/\r$//g' | sed 's/\r/\\n/g' | sed 's/  */ /g' | iconv -c -t ascii >> $tmp2
+
+
+
+cat $incremented | sed 's/T00Z/T000000Z/g' | sed 's/T59$/T235959/g' | sed 's/00 00/0000/g' | sed -r 's/(DTSTART;.*T)235959/\1000000/g' | tr "\n" "\r" | sed -r 's/(DTSTAMP:[0-9]{8}T[0-9]{6})\r/\1Z/g' | sed 's/\r\r*/\r/g'| sed -r 's/ \r/\r/g'| sed -r 's/\r([A-Z][A-Z][A-Z])/\n\1/g' | sed 's/\r$//g' | sed 's/\r/\\n/g' | sed 's/  */ /g' | iconv -c -t ascii >> $tmp2
 rm $incremented
 
 echo -e "\nEND:VCALENDAR" >> $tmp2
