@@ -1,18 +1,18 @@
 #!/bin/bash
 
 tmp=$(tempfile)
+outfile=$(tempfile)
 
-curl -v -A "clemo's iCal-script" "http://segvault.space/events.html" > $tmp
+curl -v -A "clemo's iCal-script" "http://segvault.space/events.html" > $tmp 2>$outfile
 
 tmp2=$(tempfile)
 cat $tmp | tr " \n\r\f\t" " " | sed -r 's/ +/ /g' | sed 's/<h3>Upcoming Events<\/h3>/\n&/g' | tail -n 1 | sed 's/div class="entry clearfix">/\n&/g' | sed 's/<div class="entry-date"><span>/<div class="entry-date">??<span>/g' | sed -r 's/<div class="entry-date">([0-9])\./<div class="entry-date">0\1\./g' | grep -v "</section>\|<h3>" > $tmp2
 
 rm $tmp
 
-
 currentYear=$(date '+%Y')
 
-cat $tmp2 | sed -r "s/.*<div class=\"entry-date\">([^\.]+)\.*<span>(.*)<\/span><\/div> +<\/a>.*<h2><a href=\"#\">(.*)<\/a><\/h2>.*<span class=\"label label-.*\">(.*)<\/span><\/li>.*<i class=\"icon-time\"><\/i>([0-9 ]+):([0-9 ]+).*<\/a><\/li> <li><a href=\"#\">.*class=\"icon-map-marker2\"><\/i>(.*)<\/a><\/li> <\/ul.*<div class=\"entry-content\"> <p>(.*)<\/p> <\/div> <\/div> <\/div.*/BEGIN:VEVENT\nUID:SEGVAULT$currentYear\2\1T\5\600\nSUMMARY:\3\nDTSTART;TZID=Europe\/Vienna:$currentYear\2\1T\5\6ZEROZERO\nDTEND;TZID=Europe\/Vienna:$currentYear\2\1T\5\659\nDTSTAMP:$currentYear\2\1T\5\600Z\nCATEGORIES:\4\nLOCATION:\7\nDESCRIPTION:\8\nEND:VEVENT/g" > $tmp
+cat $tmp2 | sed -r "s/.*<div class=\"entry-date\">([^\.]+)[\.0-9-]*<span>(.*)<\/span><\/div> +<\/a>.*<h2><a href=\"#\">(.*)<\/a><\/h2>.*<span class=\"label label-.*\">(.*)<\/span><\/li>.*<i class=\"icon-time\"><\/i>([0-9 ]*):*([0-9 ]*).*<\/a><\/li> <li><a href=\"#\">.*class=\"icon-map-marker2\"><\/i>(.*)<\/a><\/li> <\/ul.*<div class=\"entry-content\"> <p>(.*)<\/p> <\/div> <\/div> <\/div.*/BEGIN:VEVENT\nUID:SEGVAULT$currentYear\2\1T\5\600\nSUMMARY:\3\nDTSTART;TZID=Europe\/Vienna:$currentYear\2\1T\5\6ZEROZERO\nDTEND;TZID=Europe\/Vienna:$currentYear\2\1T\5\659\nDTSTAMP:$currentYear\2\1T\5\600Z\nCATEGORIES:\4\nLOCATION:\7\nDESCRIPTION:\8\nEND:VEVENT/g" > $tmp
 
 cat $tmp | sed 's/Mai/05/g' | sed 's/März/03/' | sed 's/Jänner/01/g'  | sed 's/April/04/g' | sed 's/Februar/02/g' | sed 's/J<C3><A4>nner/01/g' | sed 's/Juni/06/g' | sed -r 's/ *ZERO/0/g' | sed 's/Juli/07/g' | sed 's/August/08/g' | sed 's/September/09/g' | sed 's/Oktober/10/g' | sed 's/November/11/g' | sed 's/Dezember/12/g' >  $tmp2
 
