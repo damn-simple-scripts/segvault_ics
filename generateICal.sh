@@ -39,7 +39,7 @@ echo "VERSION:2.0" >> $tmp2
 echo "PRODID:SegvaultSpace" >> $tmp2
 echo "BEGIN:VTIMEZONE" >> $tmp2
 echo "TZID:Europe/Vienna" >> $tmp2
-echo "X-LIC-LOCATION:Europe/Vienna" >> $tmp2
+#echo "X-LIC-LOCATION:Europe/Vienna" >> $tmp2
 echo "BEGIN:DAYLIGHT" >> $tmp2
 echo "TZOFFSETFROM:+0100" >> $tmp2
 echo "TZOFFSETTO:+0200" >> $tmp2
@@ -61,9 +61,11 @@ rm $incremented
 
 echo -e "\nEND:VCALENDAR" >> $tmp2
 
-cat $tmp2 | sed '/^\s*$/d' | perl -pe 's/\n/\r\n/' > $tmp
+cat $tmp2 | sed '/^\s*$/d' | perl -pe 's/\n/\r\n/' > $tmp 2>>$outfile
 
 mv $tmp /var/www/html/segVaultCal/current.ics
 rm $tmp2
 
+cat $outfile
+rm $outfile
 echo "completed $(date)"
