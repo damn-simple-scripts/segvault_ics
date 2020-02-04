@@ -3,7 +3,7 @@
 tmp=$(tempfile)
 outfile=$(tempfile)
 
-curl -v -A "clemo's iCal-script" "http://segvault.space/events.html" > $tmp 2>$outfile
+curl -v -A "clemo's iCal-script" "https://segvault.space/events.html" > $tmp 2>$outfile
 
 tmp2=$(tempfile)
 cat $tmp | tr " \n\r\f\t" " " | sed -r 's/ +/ /g' | sed 's/<h3>Upcoming Events<\/h3>/\n&/g' | tail -n 1 | sed 's/div class="entry clearfix">/\n&/g' | sed 's/<div class="entry-date"><span>/<div class="entry-date">??<span>/g' | sed -r 's/<div class="entry-date">([0-9])\./<div class="entry-date">0\1\./g' | grep -v "</section>\|<h3>" > $tmp2
@@ -71,11 +71,23 @@ rm $incremented
 
 echo "\n" >> $tmp2
 
-curl -A "clemo's iCal-script" -s "https://segvault.space/js/events-data.js" | grep ":" | sed -r "s/^.*'([0-9][0-9])-([0-9][0-9])-([0-9][0-9][0-9][0-9])'\s*:\s*'[^>]*>([^<]*).*$/BEGIN:VEVENT\nUID:SEGVAULT\3\1\2T180000\nSUMMARY:\4\nDTSTART;TZID=Europe\/Vienna:\3\1\2T180000\nDTEND;TZID=Europe\/Vienna:\3\1\2T220000\nDTSTAMP:\3\1\2T180000Z\nCATEGORIES:Public\nLOCATION:Heinrich-Schneidmadl-Str. 15\\\, Top 0.23\\\, St. Poelten\\\, Austria\nDESCRIPTION: \4\\\nfrom https:\/\/segvault.space\/js\/events-data.js\nEND:VEVENT/g" | sed "s/$(echo '&#223;' | pandoc -f html -t plain)/ss/g" | sed "s/$(echo '&ouml;' | pandoc -f html -t plain)/oe/g" | sed "s/$(echo '&auml;' | pandoc -f html -t plain)/ae/g" | sed "s/$(echo '&uuml;' | pandoc -f html -t plain)/ue/g" | sed "s/$(echo '&Ouml;' | pandoc -f html -t plain)/Oe/g" | sed "s/$(echo '&Auml;' | pandoc -f html -t plain)/Ae/g" | sed "s/$(echo '&Uuml;' | pandoc -f html -t plain)/Ue/g" | sed 's/: */:/g'| iconv -c -t ascii  >> $tmp2
+curl -A "clemo's iCal-script" -s "https://segvault.space/js/events-data.js" | grep ":" | sed -r "s/^.*'([0-9][0-9])-([0-9][0-9])-([0-9][0-9][0-9][0-9])'\s*:\s*'[^>]*>([^<]*).*$/BEGIN:VEVENT\nUID:SEGVAULT\3\1\2T180000\nSUMMARY:\4\nDTSTART;TZID=Europe\/Vienna:\3\1\2T180000\nDTEND;TZID=Europe\/Vienna:\3\1\2T220000\nDTSTAMP:\3\1\2T180000Z\nCATEGORIES:Public\nLOCATION:Kremsergasse 11\\\, St. Poelten\\\, Austria\nDESCRIPTION: \4\\\nfrom https:\/\/segvault.space\/js\/events-data.js\nEND:VEVENT/g" | sed "s/$(echo '&#223;' | pandoc -f html -t plain)/ss/g" | sed "s/$(echo '&ouml;' | pandoc -f html -t plain)/oe/g" | sed "s/$(echo '&auml;' | pandoc -f html -t plain)/ae/g" | sed "s/$(echo '&uuml;' | pandoc -f html -t plain)/ue/g" | sed "s/$(echo '&Ouml;' | pandoc -f html -t plain)/Oe/g" | sed "s/$(echo '&Auml;' | pandoc -f html -t plain)/Ae/g" | sed "s/$(echo '&Uuml;' | pandoc -f html -t plain)/Ue/g" | sed 's/: */:/g'| iconv -c -t ascii  >> $tmp2
+
 
 echo -e "\nEND:VCALENDAR" >> $tmp2
 
-cat $tmp2 | sed 's/Binary file.*$//g' | sed 's/END:VEVENT.*/END:VEVENT/g' | sed '/^\s*$/d' | perl -pe 's/\n/\r\n/' > $tmp 2>>$outfile
+cat $tmp2 | sed 's/Binary file.*$//g' | sed 's/END:VEVENT.*/END:VEVENT/g' | sed '/^\s*$/d' > $tmp 2>>$outfile
+
+cat $tmp | grep "^UID:" | sort | uniq -c | sed 's/^\s*//g'| grep -v "^1 "|cut -d ' ' -f2 | while read ui #replace duplicate (2 times semae) ID
+do
+	rnd=$( printf "%02d" $(( RANDOM % 60 )))
+	rep="$(echo "$ui" | sed -r "s/^(.*)(..)\$/\1$rnd/g")"
+	echo "uid='$ui' rep='$rep'"
+	sed -i -r "0,/$ui/ s//$rep/g" $tmp
+done
+
+cat $tmp | perl -pe 's/\n/\r\n/' > $tmp2
+cat $tmp2 > $tmp
 
 mv $tmp /var/www/html/segVaultCal/current.ics
 rm $tmp2
